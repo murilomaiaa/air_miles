@@ -39,7 +39,7 @@ Para executar o projeto, você deverá clonar, entrar na pasta do projeto e exec
 ```sh
 git clone git@github.com:murilomaiaa/air_miles.git \ 
   && cd air_miles \
-  docker-compose up -d
+  && docker-compose up -d
 
 
 ```
