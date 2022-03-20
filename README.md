@@ -34,19 +34,16 @@ Api responsável pelo envio de emails
 
 ### Executando o projeto
 
-Para executar o projeto, você deverá clonar e entrar na pasta do projeto. Segue exemplo utilizando SSH. Você também pode baixar usando a CLI do github
+Para executar o projeto, você deverá clonar, entrar na pasta do projeto e executar os serviços utilizando [docker-compose](./docker-compose.yml). Segue exemplo utilizando SSH. Você também pode baixar usando a CLI do github
 
 ```sh
-git clone git@github.com:murilomaiaa/faithful-management.git && cd faithful-management
+git clone git@github.com:murilomaiaa/air_miles.git \ 
+  && cd air_miles \
+  docker-compose up -d
+
 
 ```
-
-Execute a API com [docker-compose](./docker-compose.yml)
-
-```sh
-docker-compose up -d
-```
-O docker-compose irá iniciar 3 serviços
+O docker-compose irá iniciar os seguintes serviços
 1. Uma instância de RabbitMQ.
 2. Banco de dados Postgres para o air_miles_card
 3. Redis para fazer rate limiter do air_miles_card
