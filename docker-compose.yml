@@ -1,0 +1,96 @@
+version: '3'
+
+networks:
+  air_miles:
+    driver: bridge
+
+services:
+  air_miles_rabbitmq:
+    image: "rabbitmq:3.8-management-alpine"
+    container_name: air_miles_rabbitmq
+    hostname: air_miles_rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - "/var/docker/rabbitmq:/var/lib/rabbitmq/mnesia"
+    networks:
+      - air_miles
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+
+  air_miles_card_db:
+    image: postgres:13-alpine
+    container_name: air_miles_card_db
+    restart: always
+    tty: true
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=air_miles_card
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - /var/docker/postgresql/air_miles_card_db:/var/lib/postgresql/data/pgdata
+    networks:
+      - air_miles
+    ports:
+      - "5432:5432"
+
+  air_mile_redis:
+    image: docker.io/bitnami/redis:6.2
+    container_name: air_mile_redis
+    environment:
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+      - REDIS_AOF_ENABLED=no
+      - REDIS_PASSWORD=root
+    volumes:
+      - '/var/docker/redis:/bitnami/redis/data'
+    networks:
+      - air_miles
+    ports:
+      - '6379:6379'
+
+  air_miles_card_node:
+    image: mrlmaia/air_miles_card
+    container_name: air_miles_card_node
+    entrypoint: dockerize -wait tcp://air_miles_card_db:5432 -wait tcp://admin:admin@air_miles_rabbitmq:15672/ -timeout 20s yarn start
+    tty: true
+    restart: always
+    networks:
+      - air_miles
+    depends_on:
+      - air_miles_card_db
+      - air_mile_redis
+      - air_miles_rabbitmq
+    ports:
+      - '3333:3333'
+  
+  air_miles_newsletter_db:
+    image: postgres:13-alpine
+    container_name: air_miles_newsletter_db
+    restart: always
+    tty: true
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=air_miles_newsletter
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - /var/docker/postgresql/air_miles_newsletter_db:/var/lib/postgresql/data
+    networks:
+      - air_miles
+
+  air_miles_newsletter_node:
+    image: mrlmaia/air_miles_newsletter
+    container_name: air_miles_newsletter_node
+    entrypoint: dockerize -wait tcp://air_miles_newsletter_db:5432 -wait tcp://admin:admin@air_miles_rabbitmq:15672/ -timeout 25s yarn start
+    tty: true
+    restart: always
+    networks:
+      - air_miles
+    depends_on:
+      - air_miles_newsletter_db
+      - air_miles_rabbitmq
+    ports:
+      - '3334:3334'
