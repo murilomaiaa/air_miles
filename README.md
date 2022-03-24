@@ -42,9 +42,8 @@ Para executar o projeto, você deverá clonar, entrar na pasta do projeto e exec
 git clone git@github.com:murilomaiaa/air_miles.git \ 
   && cd air_miles \
   && docker-compose up -d
-
-
 ```
+
 O docker-compose irá iniciar os seguintes serviços
 1. Uma instância de RabbitMQ.
 2. Banco de dados Postgres para o air_miles_card
@@ -52,3 +51,6 @@ O docker-compose irá iniciar os seguintes serviços
 4. air_miles_card.
 5. Banco de dados Postgres para o air_miles_newsletter
 6. air_miles_newsletter
+7. Aplicação web
+
+Para utilizar a aplicação basta acessar `http://localhost:3000`

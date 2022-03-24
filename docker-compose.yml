@@ -94,12 +94,12 @@ services:
       - air_miles_rabbitmq
     ports:
       - '3334:3334'
-  
-  # air_miles_web:
-  #   image: mrlmaia/air_miles_web
-  #   container_name: air_miles_web
-  #   tty: true
-  #   networks:
-  #     - air_miles
-  #   ports:
-  #     - '3000:3000'
+
+  air_miles_web:
+    image: mrlmaia/air_miles_web
+    container_name: air_miles_web
+    tty: true
+    networks:
+      - air_miles
+    ports:
+      - '3000:3000'
