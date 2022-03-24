@@ -18,6 +18,8 @@ Projeto desenvolvido para praticar conceitos de micro serviços. Os micro servi�
 Api responsável pelo cadastro dos cartões
 - [Air miles newsletter](https://github.com/murilomaiaa/air_miles_newsletter) 
 Api responsável pelo envio de emails
+- [Air miles web](https://github.com/murilomaiaa/air_miles_web) 
+Aplicação web responsável pela interface das API's com o usuário
 
 ### Tecnologias utilizadas
 - Node + Typescript
